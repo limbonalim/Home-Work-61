@@ -6,15 +6,17 @@ import './Info.css';
 interface Props {
   country: ApiCounty | null;
   borders: ApiCounty[];
-  onClick: (country: ApiCounty, borders: string[]) => void;
+  onClick: (country: ApiCounty, listOfBorders: ApiCounty[]) => void;
+  getError: (error: string) => void;
 }
 
-const MemoInfo: React.FC<Props> = React.memo(function Info({country, borders, onClick}) {
+const MemoInfo: React.FC<Props> = React.memo(function Info({country, borders, onClick, getError}) {
   const listOfBorders = borders.map((border: ApiCounty, index: number) => (
     <ListItem
       key={index}
       country={border}
       onClick={onClick}
+      getError={getError}
     />
   ));
 

@@ -1,21 +1,23 @@
-import React, {useEffect} from 'react';
-import ListItem from './ListItem.tsx';
+import React from 'react';
+import MemoListItem from './ListItem.tsx';
 import {ApiCounty} from '../../types';
 import './List.css';
 
 interface Props {
   countries: ApiCounty[];
-  onClick: (country: ApiCounty, borders: string[]) => void;
+  onClick: (country: ApiCounty, listOfBorders: ApiCounty[]) => void;
+  getError: (error: string) => void;
 }
 
-const List: React.FC<Props> = ({countries, onClick}) => {
-  console.log('[List] render')
-  useEffect(() => {
-    console.log('[List] update')
-  }, []);
-
+const MemoList: React.FC<Props> = React.memo(function List({countries, onClick, getError}) {
   const listOfCountries = countries.map((country: ApiCounty, index: number) => {
-    return (<ListItem key={index} country={country} onClick={onClick}/>);
+    return (
+      <MemoListItem
+        key={index}
+        country={country}
+        onClick={onClick}
+        getError={getError}
+      />);
   });
 
   return (
@@ -23,6 +25,8 @@ const List: React.FC<Props> = ({countries, onClick}) => {
       {listOfCountries}
     </div>
   );
-};
+}, (prevProps, nextProps) => {
+  return prevProps.countries.length === nextProps.countries.length;
+});
 
-export default List;
+export default MemoList;
