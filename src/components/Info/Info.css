@@ -1,0 +1,67 @@
+.Info {
+  height: 100vh;
+  display: flex;
+  gap: 5px;
+  flex-grow: 1;
+  justify-content: space-between;
+  padding: 10px;
+  border: 2px solid black;
+  box-sizing: border-box;
+}
+
+.Info .text {
+  flex-grow: 1;
+}
+
+.Info .text p {
+  font-weight: 600;
+  color: grey;
+  white-space: nowrap;
+}
+
+.Info .data {
+  font-weight: 400;
+  color: #1a1a1a;
+}
+
+.Info .borders {
+  width: max-content;
+  max-height: 47vh;
+
+}
+
+.Info .image-container {
+  max-width: 300px;
+  max-height: 300px;
+}
+
+.Info .image {
+  height: auto;
+  width: 100%;
+  box-shadow: 4px 4px 8px 0 rgba(34, 60, 80, 0.2);
+}
+
+@media screen and (max-width: 700px) {
+  .Info {
+    flex-direction: column;
+  }
+
+  .name {
+    margin: 5px 0;
+  }
+
+  .Info .officialName {
+    font-size: 1em;
+    margin: 5px 0;
+  }
+
+  .Info .borders {
+    max-height: 36vh;
+  }
+
+  .Info .image-container {
+    order: -1;
+    max-width: 150px;
+    max-height: 150px;
+  }
+}

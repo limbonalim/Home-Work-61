@@ -1,13 +1,23 @@
 .List {
   height: 100vh;
+  box-sizing: border-box;
+  min-width: 150px;
   overflow-y: scroll;
   border: 2px solid black;
 }
 
-.List .List-item {
+.List-item {
   cursor: pointer;
 }
 
-.List .List-item:hover {
+.List-item:hover {
   color: grey;
+}
+
+@media screen and (max-width: 600px) {
+  .List {
+    max-width: max-content;
+    min-width: auto;
+    width: auto;
+  }
 }

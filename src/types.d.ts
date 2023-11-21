@@ -1,5 +1,6 @@
 export interface ApiCounty {
   name: {
+    common: string;
     official: string;
   };
   borders: string[];
@@ -16,4 +17,5 @@ export interface ApiCounty {
       symbol: string;
     }
   };
+  timezones: string[];
 }

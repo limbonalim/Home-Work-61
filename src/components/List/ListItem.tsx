@@ -1,18 +1,22 @@
 import React from 'react';
+import {ApiCounty} from '../../types';
 import './List.css';
 
 interface Props {
-  name: string;
+  country: ApiCounty;
+  onClick: (country: ApiCounty, borders: string[]) => void;
 }
 
-const MemoListItem: React.FC<Props> = React.memo(function ListItem({name}) {
+const MemoListItem: React.FC<Props> = React.memo(function ListItem({country, onClick}) {
+
   return (
-    <div className="List-item">
-      {name}
-    </div>
+    <div
+      onClick={() => onClick(country, country.borders)}
+      className="List-item"
+    >{country.name.common}</div>
   );
 }, (prevProps, nextProps) => {
-  return prevProps.name === nextProps.name;
+  return prevProps.country.name.common === nextProps.country.name.common;
 });
 
 export default MemoListItem;
