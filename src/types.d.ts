@@ -4,7 +4,7 @@ export interface ApiCounty {
     official: string;
   };
   borders: string[];
-  capital: string[];
+  capital?: string[];
   flags: {
     alt: string;
     svg: string;

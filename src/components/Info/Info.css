@@ -61,7 +61,8 @@
 
   .Info .image-container {
     order: -1;
-    max-width: 150px;
-    max-height: 150px;
+    max-width: 95px;
+    max-height: 95px;
+    margin-bottom: 20px;
   }
 }

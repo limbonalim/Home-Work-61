@@ -8,7 +8,6 @@ interface Props {
 }
 
 const MemoListItem: React.FC<Props> = React.memo(function ListItem({country, onClick}) {
-
   return (
     <div
       onClick={() => onClick(country, country.borders)}
@@ -16,7 +15,7 @@ const MemoListItem: React.FC<Props> = React.memo(function ListItem({country, onC
     >{country.name.common}</div>
   );
 }, (prevProps, nextProps) => {
-  return prevProps.country.name.common === nextProps.country.name.common;
+  return (prevProps.country.name.common === nextProps.country.name.common);
 });
 
 export default MemoListItem;

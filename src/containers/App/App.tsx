@@ -5,7 +5,7 @@ import Info from '../../components/Info/Info.tsx';
 import {ApiCounty} from '../../types';
 import './App.css';
 
-const url = 'https://restcountries.com/v3.1/all';
+const url: string = 'https://restcountries.com/v3.1/all';
 const urlAlpha = (code): string => `https://restcountries.com/v3.1/alpha/${code}`;
 
 
@@ -24,7 +24,7 @@ const App = () => {
   }, [getData]);
 
 
-  const onClick = async (country: ApiCounty, borders: string[]) => {
+  const onClick = useCallback(async (country: ApiCounty, borders: string[] | undefined) => {
     const listOfBorders: ApiCounty[] = [];
     if (borders) {
       const response: Promise<AxiosResponse>[] = borders.map((code: string) => axios.get<ApiCounty[]>(urlAlpha(code)));
@@ -35,7 +35,7 @@ const App = () => {
     }
     setSelectedCountry(country);
     setBorders(listOfBorders);
-  };
+  }, []);
 
   return (
     <>

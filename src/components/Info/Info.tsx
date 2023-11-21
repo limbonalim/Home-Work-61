@@ -1,7 +1,7 @@
 import React from 'react';
 import {ApiCounty} from '../../types';
-import './Info.css';
 import ListItem from '../List/ListItem.tsx';
+import './Info.css';
 
 interface Props {
   country: ApiCounty | null;
@@ -9,14 +9,19 @@ interface Props {
   onClick: (country: ApiCounty, borders: string[]) => void;
 }
 
-const Info: React.FC<Props> = ({country, borders, onClick}) => {
-  const listOfBorders = borders.map((border, index) => (
+const MemoInfo: React.FC<Props> = React.memo(function Info({country, borders, onClick}) {
+  const listOfBorders = borders.map((border: ApiCounty, index: number) => (
     <ListItem
       key={index}
       country={border}
-      onClick={onClick}/>
+      onClick={onClick}
+    />
   ));
 
+  let capital: string = '-';
+  if (country && country.capital) {
+    capital = country.capital[0];
+  }
   const scrollStyle: React.CSSProperties = {
     overflowY: 'visible'
   };
@@ -30,7 +35,7 @@ const Info: React.FC<Props> = ({country, borders, onClick}) => {
       <div className="text">
         <h2 className="name">{country.name.common}</h2>
         <h3 className="officialName">{country.name.official}</h3>
-        <p>Capital: <span className="data">{country.capital[0]}</span></p>
+        <p>Capital: <span className="data">{capital}</span></p>
         <p>Population: <span className="data">{country.population}</span></p>
         <p>Region: <span className="data">{country.region}</span></p>
         <div>
@@ -44,11 +49,13 @@ const Info: React.FC<Props> = ({country, borders, onClick}) => {
         <img
           className="image"
           src={country.flags.svg}
-          alt={country.flags.alt}
+          alt={country.flags.alt ? country.flags.alt : country.name.common}
         />
       </div>
     </div>
   );
-};
+}, (prevProps, nextProps) => {
+  return (prevProps.country) && ((prevProps.country.name.common === prevProps.country.name.common) && (prevProps.country.name.official === nextProps.country.name.official));
+});
 
-export default Info;
+export default MemoInfo;

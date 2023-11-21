@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import ListItem from './ListItem.tsx';
 import {ApiCounty} from '../../types';
 import './List.css';
@@ -9,7 +9,11 @@ interface Props {
 }
 
 const List: React.FC<Props> = ({countries, onClick}) => {
-  console.log(countries);
+  console.log('[List] render')
+  useEffect(() => {
+    console.log('[List] update')
+  }, []);
+
   const listOfCountries = countries.map((country: ApiCounty, index: number) => {
     return (<ListItem key={index} country={country} onClick={onClick}/>);
   });
