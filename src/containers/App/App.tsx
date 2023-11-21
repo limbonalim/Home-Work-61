@@ -1,10 +1,27 @@
+import {useCallback, useEffect, useState} from 'react';
+import axios from 'axios';
+import List from '../../components/List/List.tsx';
+import {ApiCounty} from '../../../types';
+import './App.css';
 
-import './App.css'
+const url = 'https://restcountries.com/v3.1/all';
+const App = () => {
+  const [countries, setCountries] = useState<ApiCounty[]>([])
 
-const App = () => (
-  <>
-    <div>Hello</div>
-  </>
-);
+  const getData = useCallback(async () => {
+    const response = await axios.get<ApiCounty[]>(url);
+    setCountries(response.data)
+  }, []);
 
-export default App
+  useEffect(() => {
+    void getData()
+  }, [getData]);
+
+  return (
+    <>
+      <List countries={countries}/>
+    </>
+  );
+};
+
+export default App;

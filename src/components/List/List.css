@@ -1,0 +1,13 @@
+.List {
+  height: 100vh;
+  overflow-y: scroll;
+  border: 2px solid black;
+}
+
+.List .List-item {
+  cursor: pointer;
+}
+
+.List .List-item:hover {
+  color: grey;
+}
