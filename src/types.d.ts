@@ -12,10 +12,12 @@ export interface ApiCounty {
   region: string;
   population: number;
   currencies: {
-    [key: string]: {
-      name: string;
-      symbol: string;
-    }
+    [key: string]: Money;
   };
   timezones: string[];
+}
+
+export interface Money {
+  name: string;
+  symbol: string;
 }
