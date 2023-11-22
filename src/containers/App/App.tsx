@@ -3,6 +3,7 @@ import axios, {AxiosResponse} from 'axios';
 import Alert from 'react-bootstrap/Alert';
 import MemoList from '../../components/List/List.tsx';
 import MemoInfo from '../../components/Info/Info.tsx';
+import Search from '../../components/Search/Search.tsx';
 import Loading from '../../components/Loading/Loading.tsx';
 import {ApiCounty} from '../../types';
 import './App.css';
@@ -10,6 +11,8 @@ import './App.css';
 
 const url: string = 'https://restcountries.com/v3.1/all';
 const urlAlpha = (code): string => `https://restcountries.com/v3.1/alpha/${code}`;
+
+const searchByNameUrl = (name) => `https://restcountries.com/v3.1/name/${name}`;
 
 const App = () => {
   const [countries, setCountries] = useState<ApiCounty[]>([]);
@@ -49,9 +52,22 @@ const App = () => {
       }
       setSelectedCountry(country);
       setBorders(listOfBorders);
-      setInfoLoading(false);
     } catch (e: Error) {
       getError(e.message);
+    } finally {
+      setInfoLoading(false);
+    }
+  };
+
+  const onSubmit = async (name: string) => {
+    try {
+      setShowSpinner(true);
+      const response = await axios.get<ApiCounty[]>(searchByNameUrl(name));
+      setCountries(response.data);
+    } catch (e: Error) {
+      getError(e.message);
+    } finally {
+      setShowSpinner(false);
     }
   };
 
@@ -72,10 +88,20 @@ const App = () => {
         {
           showSpinner ?
             <Loading/> :
-            <MemoList
-              countries={countries}
-              onClick={onClick}
-            />
+            <div>
+              <div className="d-flex align-items-end m-1">
+                <Search onSubmit={onSubmit}/>
+                <button
+                  className="btn btn-success"
+                  onClick={getData}
+                >Show All
+                </button>
+              </div>
+              <MemoList
+                countries={countries}
+                onClick={onClick}
+              />
+            </div>
         }
         <MemoInfo
           country={selectedCountry}
