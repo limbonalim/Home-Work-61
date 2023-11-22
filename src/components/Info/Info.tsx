@@ -1,32 +1,25 @@
 import React, {useState} from 'react';
-import {ApiCounty, Money} from '../../types';
-import ListItem from '../List/ListItem.tsx';
-import './Info.css';
-import Loading from '../Loading/Loading.tsx';
 import {Modal} from 'react-bootstrap';
+import ListItem from '../List/ListItem.tsx';
+import Loading from '../Loading/Loading.tsx';
+import {ApiCounty, Money} from '../../types';
+import './Info.css';
 
 interface Props {
   country: ApiCounty | null;
   borders: ApiCounty[];
-  onClick: (country: ApiCounty, listOfBorders: ApiCounty[]) => void;
-  getError: (error: string) => void;
+  onClick: (country: ApiCounty, borders: string[]) => void;
+  loading: boolean;
 }
 
-const MemoInfo: React.FC<Props> = React.memo(function Info({country, borders, onClick, getError}) {
-  const [loading, setLoading] = useState<boolean>(false);
+const MemoInfo: React.FC<Props> = React.memo(function Info({country, borders, onClick, loading}) {
   const [showModal, setShowModal] = useState<boolean>(false);
-
-  const getInfoLoading = (status: boolean) => {
-    setLoading(status);
-  };
 
   const listOfBorders = borders.map((border: ApiCounty, index: number) => (
     <ListItem
       key={index}
       country={border}
       onClick={onClick}
-      getError={getError}
-      getInfoLoading={getInfoLoading}
     />
   ));
 

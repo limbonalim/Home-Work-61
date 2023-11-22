@@ -5,18 +5,16 @@ import './List.css';
 
 interface Props {
   countries: ApiCounty[];
-  onClick: (country: ApiCounty, listOfBorders: ApiCounty[]) => void;
-  getError: (error: string) => void;
+  onClick: (country: ApiCounty, borders: string[]) => void;
 }
 
-const MemoList: React.FC<Props> = React.memo(function List({countries, onClick, getError}) {
+const MemoList: React.FC<Props> = React.memo(function List({countries, onClick}) {
   const listOfCountries = countries.map((country: ApiCounty, index: number) => {
     return (
       <MemoListItem
         key={index}
         country={country}
         onClick={onClick}
-        getError={getError}
       />);
   });
 

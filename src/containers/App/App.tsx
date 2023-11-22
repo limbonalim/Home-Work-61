@@ -1,22 +1,24 @@
 import {useEffect, useState} from 'react';
-import axios from 'axios';
+import axios, {AxiosResponse} from 'axios';
 import Alert from 'react-bootstrap/Alert';
 import MemoList from '../../components/List/List.tsx';
 import MemoInfo from '../../components/Info/Info.tsx';
+import Loading from '../../components/Loading/Loading.tsx';
 import {ApiCounty} from '../../types';
 import './App.css';
-import Loading from '../../components/Loading/Loading.tsx';
+
 
 const url: string = 'https://restcountries.com/v3.1/all';
+const urlAlpha = (code): string => `https://restcountries.com/v3.1/alpha/${code}`;
 
 const App = () => {
   const [countries, setCountries] = useState<ApiCounty[]>([]);
   const [selectedCountry, setSelectedCountry] = useState<ApiCounty | null>(null);
   const [borders, setBorders] = useState<ApiCounty[]>([]);
   const [showSpinner, setShowSpinner] = useState<boolean>(false);
-  const [showInfoSpinner, setShowInfoSpinner] = useState<boolean>(false);
   const [showError, setShowError] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
+  const [infoLoading, setInfoLoading] = useState<boolean>(false);
 
   const getData = async () => {
     try {
@@ -34,9 +36,23 @@ const App = () => {
     void getData();
   }, []);
 
-  const onClick = (country: ApiCounty, listOfBorders: ApiCounty[]) => {
-    setSelectedCountry(country);
-    setBorders(listOfBorders);
+  const onClick = async (country: ApiCounty, borders: string[] | undefined) => {
+    try {
+      setInfoLoading(true);
+      const listOfBorders: ApiCounty[] = [];
+      if (borders) {
+        const response: Promise<AxiosResponse>[] = borders.map((code: string) => axios.get<ApiCounty[]>(urlAlpha(code)));
+        const answer: AxiosResponse<ApiCounty>[] = await Promise.all(response);
+        for (let item of answer) {
+          listOfBorders.push(item.data[0]);
+        }
+      }
+      setSelectedCountry(country);
+      setBorders(listOfBorders);
+      setInfoLoading(false);
+    } catch (e: Error) {
+      getError(e.message);
+    }
   };
 
   const getError = (error: string) => {
@@ -59,19 +75,14 @@ const App = () => {
             <MemoList
               countries={countries}
               onClick={onClick}
-              getError={getError}
             />
         }
-        {
-          showInfoSpinner ?
-            <Loading/> :
-            <MemoInfo
-              country={selectedCountry}
-              borders={borders}
-              onClick={onClick}
-              getError={getError}
-            />
-        }
+        <MemoInfo
+          country={selectedCountry}
+          borders={borders}
+          onClick={onClick}
+          loading={infoLoading}
+        />
       </div>
     </>
   );
