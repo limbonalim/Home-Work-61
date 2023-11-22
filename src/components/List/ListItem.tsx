@@ -9,11 +9,13 @@ interface Props {
   country: ApiCounty;
   onClick: (country: ApiCounty, listOfBorders: ApiCounty[]) => void;
   getError: (error: string) => void;
+  getInfoLoading?: (status: boolean) => void;
 }
 
-const MemoListItem: React.FC<Props> = React.memo(function ListItem({country, onClick, getError}) {
+const MemoListItem: React.FC<Props> = React.memo(function ListItem({country, onClick, getError, getInfoLoading}) {
   const onItemClick = useCallback(async (country: ApiCounty, borders: string[] | undefined) => {
     try {
+      getInfoLoading ? getInfoLoading(true) : null;
       const listOfBorders: ApiCounty[] = [];
       if (borders) {
         const response: Promise<AxiosResponse>[] = borders.map((code: string) => axios.get<ApiCounty[]>(urlAlpha(code)));
@@ -23,6 +25,7 @@ const MemoListItem: React.FC<Props> = React.memo(function ListItem({country, onC
         }
       }
       onClick(country, listOfBorders);
+      getInfoLoading ? getInfoLoading(false) : null;
     } catch (e: Error) {
       getError(e.message);
     }
